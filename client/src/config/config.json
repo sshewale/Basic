@@ -1,0 +1,4 @@
+{
+  "logLevel": "info",
+  "BROWSER_NAME": "chromeHeadless"
+}
