@@ -7,37 +7,6 @@ import exportTableToPdf from '../../../../utils/export-table-to-pdf';
 jest.mock('../../../../utils/export-table-to-pdf');
 configure({ adapter: new Adapter() });
 
-const exportMenuProps = {
-  tableRef: {
-    current: {
-      dataManager: {
-        columns: [
-          {
-            title: 'Broken QR Code URL',
-            field: 'broken-QR-url',
-            tableData: { abc: 'xyz' },
-          },
-        ],
-        sortedData: [
-          {
-            accountID: '936125974001',
-            brokenQRurl:
-              'http://brightcove.vo.llnwd.net/pd16/media/936125974001/936125974001_1121138678001_LTV-7426-en',
-            newQRURL:
-              '/content/tools/common/hmhvideo/qrcode/video.html?ref:LTV-7426-en',
-            programName: '',
-            refID: 'LTV-7426-en',
-            tableData: { id: 0 },
-            videoID: '',
-            videoName: '',
-          },
-        ],
-      },
-    },
-  },
-  fileName: 'abc',
-};
-
 describe('ExportMenu component', () => {
   let exportMenu;
   beforeAll(() => {
