@@ -1,0 +1,106 @@
+node {
+  stage('Checkout') {
+    try {
+      checkout scm
+    } catch (ex) {
+      slackNotify('FAIL', ex.message) 
+    }
+  }
+
+  stage('Run tests') {
+    try {
+      env.NODEJS_HOME = "${tool 'NodeJS 10.16.3'}"
+      env.PATH="${env.NODEJS_HOME}/bin:${env.PATH}"
+      sh 'npm install && npm run test:CI'
+    } catch (ex) {
+      slackNotify('FAIL', ex.message) 
+    }
+  }
+
+  stage('Build and Push Docker Image to Artifactory') {
+    try {
+      buildAndPush(getCommit())
+    } catch (ex) {
+      slackNotify('FAIL', ex.message) 
+    }
+  }
+
+  stage("Deploy to Bedrock DEV") {
+    try {
+      deploy(getCommit(), 'dev')
+      slackNotify('Deployment SUCCESS: DEV')
+    } catch (ex) {
+      slackNotify('FAIL', ex.message) 
+    }
+  }
+
+  stage("Approve for INT") {
+    input "Has DEV been verified as good to promote this to INT?"
+  }  
+  stage("Deploy to Bedrock INT") {
+    try {
+      deploy(getCommit(), 'int')
+      slackNotify('Deployment SUCCESS: INT')
+    } catch (ex) {
+      slackNotify('FAIL', ex.message) 
+    }
+  }
+
+  stage("Approve for PROD") {
+    input "Has DEV & INT been tested and verified to promote this to PROD?"
+  }
+  stage("Deploy to Bedrock PROD") {
+    try {
+      deploy(getCommit(), 'prod')
+      slackNotify('Deployment SUCCESS: PROD')
+    } catch (ex) {
+      slackNotify('FAIL', ex.message) 
+    }
+  }
+}
+
+def buildAndPush(commit) {
+  def app_name = "" // your application name from repository
+  def docker_group = "" // docker group name 
+  // Docker Registry "$reigistry_name" is added by default to the start of the docker_container
+  def docker_container = "$docker_group/$app_name"
+  sh "builder --debug build -f Dockerfile -p $docker_container $commit"
+}
+
+def deploy(version, where) {
+  // Following agent is the id available under Jenkins Credentials for "jenkins project name"
+  sshagent(['5b7c0dcb-75da-405d-af39-bd9112dbefb8']) {
+    def app_name = "" //your application name from repository
+    def app_role = "" //
+    sh "builder --debug deploy -f deploy/$projectname $app_role $app_name $version $where"
+  }
+}
+
+def getCommit() {
+  return sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
+}
+
+def slackNotify(buildStatus, errorMessage = '') {
+  def colorName = 'RED'
+  def colorCode = '#FF0000'
+  def subject = "Status: $buildStatus: Job: '$env.JOB_NAME' Build No:[$env.BUILD_NUMBER]"
+  def summary = "$subject ($env.BUILD_URL)"
+  
+  if (buildStatus.contains('STARTED')) {
+    color = 'YELLOW'
+    colorCode = '#FFFF00'
+  } else if (buildStatus.contains('SUCCESS')) {
+    color = 'GREEN'
+    colorCode = '#00FF00'
+  } else {
+    color = 'RED'
+    colorCode = '#FF0000'
+  }
+
+  slackSend (color: colorCode, message: summary)
+
+  if(errorMessage != '') {
+    //Signals an error: https://jenkins.io/doc/pipeline/steps/workflow-basic-steps/#error-error-signal
+    error("Stage: '$env.STAGE_NAME' Error: $errorMessage")
+  }
+}

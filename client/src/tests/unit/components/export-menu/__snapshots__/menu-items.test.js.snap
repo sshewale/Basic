@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MenuItems component will check the values and props of component 1`] = `
+<Fragment>
+  <WithStyles(ForwardRef(MenuItem))
+    className="menu-items"
+    key="One"
+    onClick={[Function]}
+  >
+    One
+  </WithStyles(ForwardRef(MenuItem))>
+  <WithStyles(ForwardRef(MenuItem))
+    className="menu-items"
+    key="Two"
+    onClick={[Function]}
+  >
+    Two
+  </WithStyles(ForwardRef(MenuItem))>
+  <WithStyles(ForwardRef(MenuItem))
+    className="menu-items"
+    key="Three"
+    onClick={[Function]}
+  >
+    Three
+  </WithStyles(ForwardRef(MenuItem))>
+</Fragment>
+`;

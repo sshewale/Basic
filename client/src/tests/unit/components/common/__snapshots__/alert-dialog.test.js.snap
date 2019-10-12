@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`alert dialog component should not open alert without the required props 1`] = `
+<WithStyles(ForwardRef(Dialog))
+  onClose={[MockFunction]}
+  open={true}
+>
+  <WithStyles(ForwardRef(DialogContent))>
+    <WithStyles(ForwardRef(DialogContentText))>
+      No records found to export.
+    </WithStyles(ForwardRef(DialogContentText))>
+  </WithStyles(ForwardRef(DialogContent))>
+  <WithStyles(ForwardRef(Button))
+    color="primary"
+    onClick={[MockFunction]}
+  >
+    Ok
+  </WithStyles(ForwardRef(Button))>
+</WithStyles(ForwardRef(Dialog))>
+`;
+
+exports[`alert dialog component should render without crashing given the required props 1`] = `
+<WithStyles(ForwardRef(Dialog))
+  onClose={[MockFunction]}
+  open={true}
+>
+  <WithStyles(ForwardRef(DialogContent))>
+    <WithStyles(ForwardRef(DialogContentText))>
+      No records found to export.
+    </WithStyles(ForwardRef(DialogContentText))>
+  </WithStyles(ForwardRef(DialogContent))>
+  <WithStyles(ForwardRef(Button))
+    color="primary"
+    onClick={[MockFunction]}
+  >
+    Ok
+  </WithStyles(ForwardRef(Button))>
+</WithStyles(ForwardRef(Dialog))>
+`;

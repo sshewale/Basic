@@ -1,0 +1,10 @@
+version: '2.1'
+
+services:
+  project-db-ui:
+    image: project-db-ui
+    build: .
+    ports:
+      - 8081:80
+      - 8082:3000
+      - 8083:8000
