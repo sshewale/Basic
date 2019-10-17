@@ -1,5 +1,5 @@
 # Part 1: Create $project React app Production Build
-FROM docker.br.hmheng.io/com-hmhco-csl/docker-node:10-latest as hmhNodeBaseImage
+FROM docker.br.hmheng.io/com-project-csl/docker-node:10-latest as hmhNodeBaseImage
 LABEL "app"="project-db-ui"
 WORKDIR /opt/project-db-ui
 COPY . .
