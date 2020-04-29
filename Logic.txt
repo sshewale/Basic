@@ -1,0 +1,10 @@
+// START 
+// call api inside loop
+let List = []
+if (List.length) {// Build listed pages
+		await Promise.all(List.map(async (value) => {
+			await mongoHelper.find(COLLECTION_NAME, { key: value });
+		}));
+	} 
+  
+// END
